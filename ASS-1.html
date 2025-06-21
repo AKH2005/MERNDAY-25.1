@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Music Player - Soni Soni</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(to right, #ffc1c1 50%, #c1fff5 50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .player {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 25px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0,0,0,0.2);
+      max-width: 320px;
+    }
+
+    .cover img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 15px;
+    }
+
+    .title {
+      margin: 15px 0;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .progress-container {
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .progress {
+      width: 80%;
+      height: 6px;
+      background: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-right: 10px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #444;
+      width: 0%;
+    }
+
+    .time {
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    .controls {
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .controls button {
+      background-color: #2f4f4f;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      padding: 10px 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .controls button:hover {
+      background-color: #00bfa5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="player">
+    <div class="cover">
+      <img src="https://i.pinimg.com/originals/6f/c7/f0/6fc7f083d9254aca54b379d004fb0b0e.jpg" alt="Soni Soni">
+    </div>
+    <div class="title">SONI SONI</div>
+
+    <div class="progress-container">
+      <div class="progress">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <div class="time" id="time">0:00</div>
+    </div>
+
+    <div class="controls">
+      <button onclick="prev()">⏮️</button>
+      <button onclick="togglePlay()">▶️</button>
+      <button onclick="next()">⏭️</button>
+      <button onclick="mute()">🔇</button>
+    </div>
+
+    <audio id="audio" src="your-audio-file.mp3"></audio>
+  </div>
+
+  <script>
+    const audio = document.getElementById("audio");
+    const playBtn = document.querySelector(".controls button:nth-child(2)");
+    const progressBar = document.getElementById("progress-bar");
+    const timeLabel = document.getElementById("time");
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        playBtn.innerHTML = "⏸️";
+      } else {
+        audio.pause();
+        playBtn.innerHTML = "▶️";
+      }
+    }
+
+    function mute() {
+      audio.muted = !audio.muted;
+    }
+
+    function prev() {
+      audio.currentTime = 0;
+    }
+
+    function next() {
+      audio.currentTime = audio.duration;
+    }
+
+    audio.addEventListener("timeupdate", () => {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progressBar.style.width = percent + "%";
+
+      const minutes = Math.floor(audio.currentTime / 60);
+      const seconds = Math.floor(audio.currentTime % 60)
+        .toString()
+        .padStart(2, "0");
+      timeLabel.textContent = `${minutes}:${seconds}`;
+    });
+  </script>
+
+</body>
+</html>
